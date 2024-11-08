@@ -1,22 +1,29 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
 class Solution {
 public:
-    bool containsNearbyDuplicate(vector<int>& nums, int k) {
-        unordered_map<int, vector<int>> mapa;
+    bool hasCycle(ListNode *head) {
+        if (!head || !head->next)
+            return false; //vacia o un nodo
 
-        for (int i = 0; i < nums.size(); ++i) //repeticiones de cada num y eso, odio mi vida
-            mapa[nums[i]].push_back(i);
-
-        for (const auto& par : mapa) {
-            const vector<int>& posiciones = par.second; //vector de posiciones
-
-            for (int i = 0; i < posiciones.size()-1 ; i++) 
-            {
-                int diff = posiciones[i+1] - posiciones[i]; //solo importa la distancia entre aparaciciones consecutivas, igual se busca minima
-                if (diff <= k)
-                    return true;
-            }
+        ListNode *slow = head;     //AVANZA UNO
+        ListNode *fast = head->next; //avanza 2
+        
+        //algortimo conejo y tortuga porque un pinche cuento provoco un algoritmo
+        while (slow != fast) //mientras no esten en el mismo
+        {
+            if (!fast || !fast->next) //si llega al final de la linkedlist
+                return false;
+            slow = slow->next; //avanza 1
+            fast = fast->next->next; //avanza 2
         }
-
-        return false; 
+        
+        return true;
     }
 };
